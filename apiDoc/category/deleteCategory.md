@@ -1,0 +1,1 @@
+Delete Category (DELETE /api/categories/:id)

@@ -1,0 +1,1 @@
+Delete Brand (DELETE /api/brands/:id)

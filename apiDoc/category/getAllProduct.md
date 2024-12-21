@@ -1,0 +1,1 @@
+Get All Categories (GET /api/categories)

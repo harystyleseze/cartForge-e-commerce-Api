@@ -1,0 +1,1 @@
+PATCH /api/users/addresses/:addressId/default

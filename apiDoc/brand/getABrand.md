@@ -1,0 +1,1 @@
+Get Brand by ID (GET /api/brands/:id)

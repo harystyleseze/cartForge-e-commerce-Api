@@ -1,0 +1,1 @@
+Get Category by ID (GET /api/categories/:id)

@@ -1,0 +1,1 @@
+Delete Address (DELETE /api/users/addresses/:addressId)
