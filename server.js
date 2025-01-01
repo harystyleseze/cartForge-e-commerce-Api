@@ -6,8 +6,9 @@ require('./models/reviewModel');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-const orderService = require('./services/orderService');
-// Comment out this line for stripe testing
+
+// Comment out this line for stripe testing - uncomment for integration
+// const orderService = require('./services/orderService');
 // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Load environment variables
@@ -16,9 +17,10 @@ dotenv.config();
 // Create Express app
 const app = express();
 
+//Middleware
 // CORS middleware
 app.use(cors());
-// Middleware
+// Express Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +32,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Database connection
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -74,7 +77,7 @@ app.use('*', (req, res) => {
   });
 });
 
-// commented stripe webhook because it's not needed for testing
+// commented stripe webhook because it's not needed for testing - uncomment for real case
 // app.use(
 //   '/api/webhook',
 //   express.raw({ type: 'application/json' }),
@@ -125,10 +128,10 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
-module.exports = app; // For testing purposes
-
 console.log('Cloudinary Config:', {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET?.slice(0, 4) + '...', // Only log first 4 chars of secret
 });
+
+module.exports = app;

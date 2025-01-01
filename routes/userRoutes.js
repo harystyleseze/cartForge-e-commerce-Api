@@ -4,7 +4,6 @@ const userController = require('../controllers/userController');
 const { protect } = require('../middlewares/authMiddleware');
 const { isAdmin } = require('../middlewares/adminMiddleware');
 
-
 // Protected routes - require authentication
 router.use(protect);
 

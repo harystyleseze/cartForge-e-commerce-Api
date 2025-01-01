@@ -74,6 +74,7 @@ const orderSchema = new mongoose.Schema({
     enum: Object.values(ORDER_STATUS),
     default: ORDER_STATUS.PENDING
   }
+  // work on the payment status schema too, set default to pending
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

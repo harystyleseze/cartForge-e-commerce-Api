@@ -6,7 +6,6 @@ const authService = {
   async findUserByEmail(email) {
     return await User.findOne({ email });
   },
-
   async register(userData) {
     const user = new User(userData);
     await user.save();

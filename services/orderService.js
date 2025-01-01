@@ -125,7 +125,7 @@ const orderService = {
     },
 
 
-// Actual code with stripe payment
+// Actual code with stripe payment - commented for testing
 //     return {
 //       order,
 //       clientSecret: paymentIntent.client_secret
