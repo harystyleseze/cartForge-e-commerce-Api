@@ -5,6 +5,28 @@ const userService = {
     return await User.findById(userId).select('-password');
   },
 
+  async updateRole(userId, updateData) {
+    try {
+      // Use findByIdAndUpdate with { new: true } and { runValidators: true }
+      const updatedUser = await User.findByIdAndUpdate(
+        userId, // The userId to find the user
+        updateData, // The data to update (including the new role)
+        { 
+          new: true,        // Return the updated document (not the old one)
+          runValidators: true // Ensure validators are run on the updated fields
+        }
+      ).select('-password'); // Exclude the password field from the result
+
+      if (!updatedUser) {
+        throw new Error('User not found');
+      }
+
+      return updatedUser;  // Return the updated user
+    } catch (error) {
+      throw new Error(error.message);  // Propagate the error to be handled by the controller
+    }
+  },
+
   async updateUserProfile(userId, updateData) {
     return await User.findByIdAndUpdate(
       userId,

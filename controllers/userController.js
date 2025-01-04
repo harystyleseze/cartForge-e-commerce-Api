@@ -17,10 +17,36 @@ const userController = {
     }
   },
 
+  // Controller to handle updating a user's role
+  async updateRole(req, res) {
+    try {
+      const { id } = req.params;  // Get the user ID from the route parameter
+      const { role } = req.body;  // Get the role from the request body
+
+      // Call the service to update the user's role
+      const updatedUser = await userService.updateRole(id, { role });
+
+      // Return a success response with the updated user
+      res.status(200).json({
+        status: 'success',
+        message: 'User role updated successfully',
+        data: { user: updatedUser }
+      });
+    } catch (error) {
+      // Handle errors (e.g., user not found, invalid role, etc.)
+      res.status(400).json({
+        status: 'error',
+        message: error.message
+      });
+    }
+  },
+
+
+
   async updateProfile(req, res) {
     try {
-      const { name, phone } = req.body;
-      const user = await userService.updateUserProfile(req.user.id, { name, phone });
+      const { email, name, phone } = req.body;
+      const user = await userService.updateUserProfile(req.user.id, { email, name, phone });
       
       res.status(200).json({
         status: 'success',
