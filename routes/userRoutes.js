@@ -7,8 +7,8 @@ const { isAdmin } = require('../middlewares/adminMiddleware');
 // Protected routes - require authentication
 router.use(protect);
 
-// Admin routes
-router.get('/all', protect, isAdmin, userController.getAllUsers);
+// Get all users
+router.get('/all', userController.getAllUsers);
 // Route to update user's role to admin (admin only)
 router.put('/updaterole/:id', isAdmin, userController.updateRole);
 

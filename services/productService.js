@@ -1,5 +1,5 @@
 const Product = require('../models/productModel');
-const Review = require('../models/reviewModel');
+// const Review = require('../models/reviewModel');
 const cloudinary = require('../utils/cloudinary');
 const fs = require('fs').promises;
 
