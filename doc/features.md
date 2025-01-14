@@ -116,6 +116,12 @@
 
 ### 7. **Review Model**  
 **Key Features:**
+The review system includes features like:
+Preventing duplicate reviews from the same user
+Automatic calculation of average ratings
+Proper population of user and product data in responses
+Authorization checks for update/delete operations
+Admin privileges for review management
 - **Product Reviews:**
   - Allow users to rate and leave feedback on products they’ve purchased.
   - Manage reviews for products (edit or delete).
@@ -147,8 +153,55 @@
   - Allow users to save products for future purchases.
   - Add, view, and remove products from the wishlist.
 
-- **API Endpoints:**
-  - `GET /wishlist/:userId`, `POST /wishlist/:userId/add`, etc
+
+
+
+### **API Endpoints Overview**
+
+1. **POST /wishlist**: 
+   - Adds an item to the user's wishlist.
+   - User is required to be authenticated (authMiddleware).
+
+2. **DELETE /wishlist/:productId**:
+   - Removes a specific product from the user's wishlist.
+   - The `productId` is passed as a parameter in the URL.
+
+3. **GET /wishlist**:
+   - Retrieves the user's entire wishlist.
+   - User authentication is required to access their wishlist.
+
+4. **PATCH /wishlist/:productId**:
+   - Updates the details of an existing item in the wishlist (e.g., quantity, price, image, etc.).
+   - The `productId` is used to identify the item in the wishlist.
+
+5. **GET /wishlist/notifications**:
+   - Retrieves notifications such as price drops or stock alerts for items in the user's wishlist.
+   - Can be used to send alerts based on the wishlist's item status (e.g., out of stock or price changes).
+
+6. **POST /wishlist/share**: 
+   - Generates a shareable link for the user's wishlist.
+   - The link can be shared with others or used for public access to the wishlist.
+
+7. **GET /wishlist/:linkId**:
+   - Allows someone to access a wishlist via a shareable link (i.e., a public wishlist). 
+   - The `linkId` corresponds to a unique identifier for the shareable wishlist link.
+
+### **Route Mapping with Authentication**
+
+- **Authentication Middleware** (`authMiddleware`): This ensures that the user is logged in before accessing their private wishlist data. For actions like adding/removing items, updating the wishlist, and generating shareable links, users must be authenticated.
+  
+- **Shareable Link**: The route `/wishlist/share` will generate a unique shareable link for the user's wishlist, and `/wishlist/:linkId` allows anyone with that link to view the wishlist (assuming it’s public).
+
+### **Considerations**: 
+
+1. **Error Handling**: For all routes, ensure that you have appropriate error handling for cases such as: 
+   - Wishlist not found.
+   - Item not found in the wishlist.
+   - Invalid product ID.
+
+2. **Shareable Link Expiry** : Consider adding an expiry time for the shareable link (e.g., the link expires in 30 days) to prevent infinite access. This can be added to the `Wishlist` schema with a `sharedLinkExpiry` field. 
+
+4. **Pagination/Filtering**: For large wishlists, consider adding pagination or filters to the `GET /wishlist` endpoint to avoid loading too many items at once. For example, limit the number of items returned in a single request and provide query parameters to control this (e.g., `GET /wishlist?page=1&limit=20`)
 
 ---
 
@@ -184,3 +237,32 @@
 
 - **Reports:**
   - Generate sales, user activity, and order reports for better decision-making.
+
+## Wishlist Features
+
+The application includes a comprehensive wishlist system that allows users to:
+
+1. Add products to their wishlist
+2. Remove products from their wishlist
+3. View their wishlist with pagination support
+4. Update wishlist items
+5. Receive notifications for price drops and stock changes
+6. Generate shareable links for their wishlist
+7. Access public wishlists through shareable links
+
+### API Endpoints
+
+- `POST /wishlist`: Add a product to wishlist
+- `DELETE /wishlist/:productId`: Remove a product from wishlist
+- `GET /wishlist`: View wishlist (with pagination)
+- `PATCH /wishlist/:productId`: Update wishlist item
+- `GET /wishlist/notifications`: Get notifications for wishlist items
+- `POST /wishlist/share`: Generate a shareable link
+- `GET /wishlist/:linkId`: Access a wishlist via shareable link
+
+### Security Features
+
+- All private wishlist operations require authentication
+- Shareable links expire after 30 days
+- Rate limiting on API endpoints
+- Input validation for all endpoints

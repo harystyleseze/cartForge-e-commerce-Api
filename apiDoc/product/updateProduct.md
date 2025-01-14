@@ -5,6 +5,8 @@ Update Product (PUT /api/products/:id)
   "price": 1099.99,
   "stockQuantity": 45,
   "description": "Updated description for iPhone 14 Pro Max",
+  "category": "65f1a2b3c4d5e6f7g8h9i0j1",
+  "brand": "65f1a2b3c4d5e6f7g8h9i0j2",
   "tags": ["smartphone", "apple", "5G", "pro"]
 }
 

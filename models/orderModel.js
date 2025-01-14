@@ -69,12 +69,61 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
   paymentIntentId: String,
+  paymentStatus: {
+    type: String,
+    enum: Object.values(PAYMENT_STATUS),
+    default: PAYMENT_STATUS.PENDING
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['card', 'bank_transfer', 'other'],
+    required: true,
+    default: 'card'
+  },
   orderStatus: {
     type: String,
     enum: Object.values(ORDER_STATUS),
     default: ORDER_STATUS.PENDING
+  },
+  couponCode: {
+    type: String,
+    trim: true,
+    uppercase: true
+  },
+  couponDiscount: {
+    type: Number,
+    default: 0
+  },
+  finalTotal: {
+    type: Number,
+    required: true
+  },
+  refundStatus: {
+    type: String,
+    enum: ['none', 'partial', 'full'],
+    default: 'none'
+  },
+  refundedAmount: {
+    type: Number,
+    default: 0
   }
-  // work on the payment status schema too, set default to pending
-}, { timestamps: true });
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+// Virtual for calculating remaining refundable amount
+orderSchema.virtual('refundableAmount').get(function() {
+  return this.finalTotal - this.refundedAmount;
+});
+
+// Pre-save middleware to update refund status
+orderSchema.pre('save', function(next) {
+  if (this.refundedAmount > 0) {
+    this.refundStatus = this.refundedAmount >= this.finalTotal ? 'full' : 'partial';
+  }
+  next();
+});
 
 module.exports = mongoose.model('Order', orderSchema);

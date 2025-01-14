@@ -2,14 +2,17 @@ module.exports = {
     PAYMENT_STATUS: {
       PENDING: 'pending',
       PAID: 'paid',
-      FAILED: 'failed'
+      FAILED: 'failed',
+      REFUNDED: 'refunded',
+      PARTIALLY_REFUNDED: 'partially_refunded'
     },
     ORDER_STATUS: {
       PENDING: 'pending',
       PROCESSING: 'processing',
       SHIPPED: 'shipped',
       DELIVERED: 'delivered',
-      CANCELLED: 'cancelled'
+      CANCELLED: 'cancelled',
+      COMPLETED: 'completed'
     },
     SUPPORTED_CURRENCIES: {
       USD: {

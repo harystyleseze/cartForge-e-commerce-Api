@@ -86,27 +86,6 @@ productSchema.virtual('reviews', {
 // Indexing for search
 productSchema.index({ name: 'text', description: 'text' });
 
-// Update average rating and review count whenever a review is added, updated, or deleted
-productSchema.methods.updateRatingAndReviewsCount = async function() {
-  // Fetch reviews directly from the Review model
-  const reviews = await Review.find({ productId: this._id });
-
-  // Calculate total rating and count
-  const totalRatings = reviews.reduce((acc, review) => acc + review.rating, 0);
-  const reviewsCount = reviews.length;
-
-  // Update the product's average rating and reviews count
-    // Set the new average rating (rounded to 1 decimal place) and reviews count
-    this.averageRating = reviewsCount > 0 ? (totalRatings / reviewsCount).toFixed(1) : 0;
-    this.reviewsCount = reviewsCount;
-  
-  // Save the updated product document
-  await this.save();
-  // Error Handling
-  const updatedProduct = await Product.findById(this._id);
-  console.log('Updated product:', updatedProduct);
-
-};
 
 // Model
 module.exports = mongoose.model('Product', productSchema);

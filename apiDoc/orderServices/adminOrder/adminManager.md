@@ -41,6 +41,35 @@ implementation:
        "data": { "refund": { "amount": 999.99, "status": "completed" } }
      }
      ```
+View Admin Statistics
+GET http://localhost:3000/admin/api/orders/statistics
+Authorization: Bearer {user_token}
+
+or
+
+GET /api/admin/orders/statistics?startDate=2024-01-01&endDate=2024-12-31
+Authorization: Bearer {admin_token}
+
+{
+    "status": "success",
+    "data": {
+        "statistics": {
+            "totalOrders": 8,
+            "orderStatus": {
+                "pending": 5,
+                "processing": 1,
+                "shipped": 0,
+                "delivered": 1,
+                "cancelled": 1,
+                "completed": 0
+            },
+            "totalSpent": 1234.56,
+            "refundedAmount": 399.98,
+            "discountsUsed": 50.00,
+            "averageOrderValue": 308.64
+        }
+    }
+}
 
 ### Flow Overview
 

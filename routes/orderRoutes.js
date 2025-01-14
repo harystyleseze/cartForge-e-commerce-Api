@@ -5,7 +5,11 @@ const { protect } = require('../middlewares/authMiddleware');
 
 router.use(protect);
 
-router.post('/', orderController.createOrder);
+router.route('/')
+  .post(orderController.createOrder)
+  .get(orderController.getUserOrders);
+
+router.get('/statistics', orderController.getUserStatistics);
 router.post('/confirm', orderController.confirmOrder);
 router.get('/:id', orderController.getOrder);
 

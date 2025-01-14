@@ -27,8 +27,13 @@ const adminOrderController = {
       
       const order = await orderService.updateOrderStatus(orderId, status);
       
-      // Send notification to user about order status update
-      await notificationService.sendOrderStatusUpdate(order);
+      // Try to send notification, but don't fail if it errors
+      try {
+        await notificationService.sendOrderStatusUpdate(order);
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Continue processing even if email fails
+      }
 
       res.status(200).json({
         status: 'success',
@@ -47,14 +52,39 @@ const adminOrderController = {
       const { orderId } = req.params;
       const { amount, reason } = req.body;
       
-      const refund = await orderService.processRefund(orderId, amount, reason);
+      const refundData = await orderService.processRefund(orderId, amount, reason);
       
-      // Send notification to user about refund
-      await notificationService.sendRefundNotification(refund);
+      // Try to send notification, but don't fail if it errors
+      try {
+        await notificationService.sendRefundNotification(refundData);
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Continue processing even if email fails
+      }
 
       res.status(200).json({
         status: 'success',
-        data: { refund }
+        data: refundData
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: 'error',
+        message: error.message
+      });
+    }
+  },
+
+  async getStatistics(req, res) {
+    try {
+      const { startDate, endDate } = req.query;
+      const statistics = await orderService.getAdminStatistics({ 
+        startDate, 
+        endDate 
+      });
+      
+      res.status(200).json({
+        status: 'success',
+        data: { statistics }
       });
     } catch (error) {
       res.status(400).json({

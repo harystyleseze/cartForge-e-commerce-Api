@@ -6,6 +6,7 @@ require('./models/reviewModel');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const scheduleTasks = require('./utils/scheduledTasks');
 
 // Comment out this line for stripe testing - uncomment for integration
 // const orderService = require('./services/orderService');
@@ -54,6 +55,8 @@ const shippingMethodRoutes = require('./routes/shippingMethodRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const adminOrderRoutes = require('./routes/adminOrderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
+const couponRoutes = require('./routes/couponRoutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -66,7 +69,8 @@ app.use('/api/shipping-methods', shippingMethodRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin/orders', adminOrderRoutes);
 app.use('/api/reviews', reviewRoutes);
-
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/coupons', couponRoutes);
 // Error handling middleware
 app.use(errorMiddleware);
 app.use(globalErrorHandler);
@@ -116,6 +120,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
+// Initialize scheduled tasks
+scheduleTasks();
 
 // Start server
 const PORT = process.env.PORT || 3000;
