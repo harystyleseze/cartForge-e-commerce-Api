@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const mongoose = require('mongoose');
 
 const userService = {
   async getUserProfile(userId) {
@@ -106,6 +107,37 @@ const userService = {
   // Add this method to the existing userService object
   async getAllUsers() {
     return await User.find().select('-password');
+  },
+
+  async deleteUser(userId) {
+    try {
+      // Find user first to check if exists
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      // Delete associated cart if exists
+      if (user.cart) {
+        await mongoose.model('Cart').findByIdAndDelete(user.cart);
+      }
+
+      // Delete user's reviews
+      await mongoose.model('Review').deleteMany({ userId: user._id });
+
+      // Delete user's orders
+      await mongoose.model('Order').deleteMany({ userId: user._id });
+
+      // Delete user's wishlist
+      await mongoose.model('Wishlist').deleteMany({ userId: user._id });
+
+      // Finally delete the user
+      await User.findByIdAndDelete(userId);
+
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 };
 

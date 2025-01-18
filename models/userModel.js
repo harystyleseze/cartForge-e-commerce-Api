@@ -80,4 +80,27 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
+// Clear/clean up
+userSchema.pre('remove', async function(next) {
+  try {
+    // Clean up associated data
+    if (this.cart) {
+      await mongoose.model('Cart').findByIdAndDelete(this.cart);
+    }
+    
+    // Delete user's reviews
+    await mongoose.model('Review').deleteMany({ userId: this._id });
+    
+    // Delete user's orders
+    await mongoose.model('Order').deleteMany({ userId: this._id });
+    
+    // Delete user's wishlist
+    await mongoose.model('Wishlist').deleteMany({ userId: this._id });
+    
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model('User', userSchema);

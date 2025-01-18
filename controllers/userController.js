@@ -141,6 +141,33 @@ const userController = {
         message: error.message
       });
     }
+  },
+
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+      
+      // Don't allow admin to delete themselves
+      if (id === req.user.id) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Admin cannot delete their own account'
+        });
+      }
+
+      await userService.deleteUser(id);
+      
+      res.status(200).json({
+        status: 'success',
+        message: 'User deleted successfully',
+        data: null
+      });
+    } catch (error) {
+      res.status(400).json({
+        status: 'error',
+        message: error.message
+      });
+    }
   }
 };
 

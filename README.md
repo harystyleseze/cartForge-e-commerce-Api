@@ -82,6 +82,7 @@ Example: To test a protected route:
 ### Users
 - **GET** `/api/users/profile`: Get logged-in user's profile.
 - **PUT** `/api/users/profile`: Update logged-in user's profile.
+- **DELETE** `/api/users/:id`: Delete a user (Admin only).
 
 ### Products
 - **GET** `/api/products`: Get all products.

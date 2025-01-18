@@ -11,6 +11,8 @@ router.use(protect);
 router.get('/all', userController.getAllUsers);
 // Route to update user's role to admin (admin only)
 router.put('/updaterole/:id', isAdmin, userController.updateRole);
+// Add delete user route (admin only)
+router.delete('/:id', isAdmin, userController.deleteUser);
 
 // Profile routes
 router.get('/profile', userController.getProfile);
