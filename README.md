@@ -119,6 +119,7 @@ Example: To test a protected route:
 - The API is intended for use in building the backend for an e-commerce platform.
 - Use JWT for user authentication and authorization. Make sure to include the token in the `Authorization` header for protected routes.
 - Admin users can access routes marked as "Admin only" and perform actions like managing products, orders, and users.
+- Demo link: [here](https://drive.google.com/file/d/1HEbsJX3eyeO6R-4902WzwTT4rZOEh0zZ/view)
 
 ## Error Handling
 - All errors will be returned with a JSON response containing the error message and status code.
